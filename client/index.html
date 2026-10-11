@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary SEO -->
+    <title>ComplaintHub — Civic Complaint Management Platform</title>
+    <meta name="description" content="Report, track, and resolve civic issues in your community with ComplaintHub. Submit pothole, garbage, streetlight, and other municipal complaints online." />
+    <meta name="keywords" content="civic complaints, municipal issues, pothole report, civic platform, community issues, government complaints" />
+    <meta name="author" content="ComplaintHub" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://complainthub.app" />
+
+    <!-- OpenGraph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://complainthub.app" />
+    <meta property="og:title" content="ComplaintHub — Civic Complaint Management Platform" />
+    <meta property="og:description" content="Report, track, and resolve civic issues in your community. Submit complaints about potholes, garbage, streetlights, and more." />
+    <meta property="og:image" content="https://complainthub.app/og-image.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ComplaintHub — Civic Complaint Management Platform" />
+    <meta name="twitter:description" content="Report, track, and resolve civic issues in your community with ComplaintHub." />
+    <meta name="twitter:image" content="https://complainthub.app/og-image.png" />
+
+    <!-- Theme Initialization Script -->
+    <script>
+      (function() {
+        var theme = localStorage.getItem('ch_theme');
+        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

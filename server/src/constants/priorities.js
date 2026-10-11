@@ -1,0 +1,15 @@
+const PRIORITIES = Object.freeze({
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  CRITICAL: 'CRITICAL',
+});
+
+const ALL_PRIORITIES = Object.values(PRIORITIES);
+const DEFAULT_PRIORITY = PRIORITIES.MEDIUM;
+
+module.exports = {
+  PRIORITIES,
+  ALL_PRIORITIES,
+  DEFAULT_PRIORITY,
+};

@@ -1,0 +1,12 @@
+# ignore all files in the root directory except for the .gitignore file itself and the README.md file and client and server directories
+/*
+!.gitignore
+!README.md
+!client/
+!server/
+
+# ignore all env and log files AND NODE_MODULES
+*.env
+*.log
+node_modules/
+dist/
