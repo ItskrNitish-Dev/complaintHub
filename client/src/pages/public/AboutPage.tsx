@@ -1,102 +1,155 @@
 import React from 'react';
-import { ShieldAlert, Users, CheckCircle, ArrowRight, Building, HelpCircle } from 'lucide-react';
+import { Landmark, Users, CheckCircle, ArrowRight, Building2, HelpCircle, ShieldCheck, Scale, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { BackButton } from '../../components/ui/BackButton';
 
 export const AboutPage: React.FC = () => {
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12 text-left">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 text-left">
       <div>
         <BackButton fallbackUrl="/" />
       </div>
 
-      <div className="text-center space-y-4 max-w-3xl mx-auto">
-        <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-          About ComplaintHub
+      {/* Official Header */}
+      <div className="bg-white dark:bg-[#131E2D] p-6 sm:p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs border-t-4 border-t-[#C59B27] space-y-3">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#0F2537] text-[#C59B27] text-[10px] font-bold uppercase tracking-wider">
+          <Landmark className="w-3.5 h-3.5" />
+          Official Citizen Charter & Redressal Framework
+        </div>
+        <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-[#0F2537] dark:text-white">
+          About ComplaintHub Civic Redressal Portal
         </h1>
-        <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-          ComplaintHub is an open civic technology platform built to bridge the gap between residents and municipal authorities. We turn everyday community concerns into tracked, accountable civic action.
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl">
+          ComplaintHub is an official digital public services platform designed to bridge residents with municipal departments and field engineering teams. The portal operationalizes citizen-first accountability, automated department allocation, and verified proof-of-work resolution.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 flex items-center justify-center">
+      {/* Three Pillars */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white dark:bg-[#131E2D] p-6 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3 shadow-xs">
+          <div className="w-10 h-10 rounded-lg bg-[#0F2537] text-[#C59B27] flex items-center justify-center border border-[#C59B27]/40">
             <Users className="w-5 h-5" />
           </div>
-          <h3 className="font-bold text-lg text-slate-900 dark:text-white">Citizen Centric</h3>
-          <p className="text-xs text-slate-500 leading-relaxed">
-            Citizens can effortlessly report neighborhood hazards with photographic evidence, precise GPS locations, and track progress without administrative bureaucracy.
+          <h3 className="font-bold text-sm text-[#0F2537] dark:text-white uppercase tracking-tight">Citizen-First Reporting</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            Citizens can lodge geotagged grievances with photo evidence, monitor real-time officer dispatch, and track SLA resolution without physical office visits.
           </p>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 flex items-center justify-center">
-            <Building className="w-5 h-5" />
+        <div className="bg-white dark:bg-[#131E2D] p-6 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3 shadow-xs">
+          <div className="w-10 h-10 rounded-lg bg-[#1B365D] text-white flex items-center justify-center border border-blue-400/40">
+            <Building2 className="w-5 h-5 text-amber-300" />
           </div>
-          <h3 className="font-bold text-lg text-slate-900 dark:text-white">Direct Department Routing</h3>
-          <p className="text-xs text-slate-500 leading-relaxed">
-            Issues are directly triaged and dispatched to specialized municipal divisions including Roads, Water, Sanitation, Street Lighting, and Public Safety.
+          <h3 className="font-bold text-sm text-[#0F2537] dark:text-white uppercase tracking-tight">Departmental SLA Routing</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            Every grievance is routed automatically to designated division heads (Roads, Water, Solid Waste, Streetlights) with defined time-bound turnaround standards.
           </p>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 flex items-center justify-center">
+        <div className="bg-white dark:bg-[#131E2D] p-6 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3 shadow-xs">
+          <div className="w-10 h-10 rounded-lg bg-emerald-900/20 text-[#059669] flex items-center justify-center border border-emerald-500/40">
             <CheckCircle className="w-5 h-5" />
           </div>
-          <h3 className="font-bold text-lg text-slate-900 dark:text-white">Transparent Lifecycle</h3>
-          <p className="text-xs text-slate-500 leading-relaxed">
-            Every step—from initial citizen submission to officer review, on-site progress, and resolution—is recorded in an immutable public audit timeline.
+          <h3 className="font-bold text-sm text-[#0F2537] dark:text-white uppercase tracking-tight">Verified Photographic Closure</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            Officers must upload completion photos upon resolving issues. Resolution is logged into an immutable audit trail accessible to the complainant and community.
           </p>
         </div>
       </div>
 
-      <div className="bg-slate-50 dark:bg-slate-900 p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 space-y-6">
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-          Frequently Asked Questions
-        </h2>
+      {/* Citizen Charter Service Standards Table */}
+      <div className="bg-white dark:bg-[#131E2D] rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
+        <div className="p-5 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Scale className="w-4 h-4 text-[#C59B27]" />
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#0F2537] dark:text-white">
+              Citizen Charter: Standard Redressal Timelines (SLA)
+            </h3>
+          </div>
+          <span className="text-[10px] font-semibold text-slate-500 font-mono">Civic Benchmark</span>
+        </div>
+        <div className="divide-y divide-slate-100 dark:divide-slate-800 text-xs">
+          <div className="p-4 grid grid-cols-1 sm:grid-cols-3 gap-2 items-center">
+            <span className="font-bold text-slate-800 dark:text-slate-200">Street Lighting & Electrical Hazards</span>
+            <span className="text-slate-500 dark:text-slate-400">Public Safety Division</span>
+            <span className="font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5" /> 24 to 48 Hours
+            </span>
+          </div>
+          <div className="p-4 grid grid-cols-1 sm:grid-cols-3 gap-2 items-center">
+            <span className="font-bold text-slate-800 dark:text-slate-200">Solid Waste Dumping & Overflowing Bins</span>
+            <span className="text-slate-500 dark:text-slate-400">Sanitation Engineering Wing</span>
+            <span className="font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5" /> 24 Hours
+            </span>
+          </div>
+          <div className="p-4 grid grid-cols-1 sm:grid-cols-3 gap-2 items-center">
+            <span className="font-bold text-slate-800 dark:text-slate-200">Potable Water Leakage & Main Pipeline Bursts</span>
+            <span className="text-slate-500 dark:text-slate-400">Water Supply & Drainage Board</span>
+            <span className="font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5" /> 12 to 24 Hours
+            </span>
+          </div>
+          <div className="p-4 grid grid-cols-1 sm:grid-cols-3 gap-2 items-center">
+            <span className="font-bold text-slate-800 dark:text-slate-200">Pothole Repair & Road Resurfacing</span>
+            <span className="text-slate-500 dark:text-slate-400">Municipal Roads & Bridges</span>
+            <span className="font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5" /> 3 to 7 Days
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Frequently Asked Questions */}
+      <div className="bg-white dark:bg-[#131E2D] p-6 sm:p-8 rounded-xl border border-slate-200 dark:border-slate-800 space-y-6 shadow-xs">
+        <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
+          <HelpCircle className="w-4 h-4 text-[#C59B27]" />
+          <h2 className="text-sm font-bold uppercase tracking-wider text-[#0F2537] dark:text-white">
+            Frequently Asked Public Grievance Questions
+          </h2>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
           <div className="space-y-1.5">
-            <h4 className="font-bold text-sm text-slate-900 dark:text-white">
-              Are all complaints publicly visible?
+            <h4 className="font-bold text-xs text-[#0F2537] dark:text-slate-200">
+              Are all registered complaints publicly visible?
             </h4>
             <p>
-              Yes. Community transparency encourages shared accountability. You can also upvote and follow issues submitted by neighbors.
+              Yes. In accordance with open governance principles, all civic complaints are visible in the public registry. Fellow citizens can upvote and follow issues in their neighborhood.
             </p>
           </div>
           <div className="space-y-1.5">
-            <h4 className="font-bold text-sm text-slate-900 dark:text-white">
-              How do officers get assigned?
+            <h4 className="font-bold text-xs text-[#0F2537] dark:text-slate-200">
+              How are field officers held accountable?
             </h4>
             <p>
-              Department administrators review submitted reports, verify the location and severity, and assign an active field officer from the relevant municipal department.
+              Municipal supervisors monitor active case aging in real-time. Overdue complaints that surpass SLA limits trigger administrative escalation alerts to executive engineers.
             </p>
           </div>
           <div className="space-y-1.5">
-            <h4 className="font-bold text-sm text-slate-900 dark:text-white">
-              Can I track updates on a complaint?
+            <h4 className="font-bold text-xs text-[#0F2537] dark:text-slate-200">
+              How do I verify that an issue is resolved satisfactorily?
             </h4>
             <p>
-              Yes. Clicking "Follow" adds you to the complaint’s notification stream. Whenever the status updates or a comment is added, you will receive an in-app alert.
+              When an officer marks an issue as resolved, they must attach photo proof of repair. Complainants receive a notification with the photo proof and can comment on the resolution.
             </p>
           </div>
           <div className="space-y-1.5">
-            <h4 className="font-bold text-sm text-slate-900 dark:text-white">
-              What if my complaint is an emergency?
+            <h4 className="font-bold text-xs text-[#0F2537] dark:text-slate-200">
+              Can ComplaintHub handle emergency distress calls?
             </h4>
             <p>
-              ComplaintHub is intended for municipal infrastructure and civic maintenance issues. For immediate life-threatening emergencies, please call local emergency services (911 / 112).
+              No. ComplaintHub is intended strictly for municipal civil works and civic maintenance. For immediate emergencies involving police, fire, or medical rescue, please dial national helpline <strong>112</strong>.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="text-center pt-4">
+      <div className="text-center pt-2">
         <Link
           to="/complaints/new"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-md"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#1B365D] hover:bg-[#0F2537] text-white font-bold text-xs uppercase tracking-wider shadow-xs transition-colors border border-blue-900"
         >
-          Report an Issue Now <ArrowRight className="w-4 h-4" />
+          Lodge Grievance Now <ArrowRight className="w-4 h-4 text-[#C59B27]" />
         </Link>
       </div>
     </div>

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { ShieldAlert, Mail, Lock, User, Phone, UserPlus } from 'lucide-react';
+import { Landmark, Mail, Lock, User, Phone, UserPlus } from 'lucide-react';
 import { useAuth } from '../../features/auth/AuthContext';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
@@ -62,20 +62,21 @@ export const RegisterPage: React.FC = () => {
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8 bg-white dark:bg-slate-900 p-8 sm:p-10 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none">
+      <div className="w-full max-w-md space-y-7 bg-white dark:bg-[#131E2D] p-8 sm:p-10 rounded-xl border border-slate-200 dark:border-slate-800 shadow-md border-t-4 border-t-[#C59B27]">
         <div className="flex justify-start">
           <BackButton fallbackUrl="/" />
         </div>
 
+        {/* Official Header */}
         <div className="text-center space-y-2">
-          <div className="mx-auto w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/25">
-            <ShieldAlert className="w-6 h-6" />
+          <div className="mx-auto w-12 h-12 rounded-lg bg-[#0F2537] border border-[#C59B27] flex items-center justify-center text-[#C59B27] shadow-xs">
+            <Landmark className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Create Citizen Account
+          <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#0F2537] dark:text-white">
+            Citizen Registration
           </h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            Join ComplaintHub to report, track, and resolve neighborhood problems
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Create an official civic account to lodge complaints and track real-time resolution
           </p>
         </div>
 
@@ -83,9 +84,9 @@ export const RegisterPage: React.FC = () => {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Input
-            label="Full Name"
+            label="Full Legal Name"
             type="text"
-            placeholder="Jane Doe"
+            placeholder="e.g. Ramesh Kumar"
             leftIcon={<User className="w-4 h-4" />}
             error={errors.name?.message}
             {...register('name')}
@@ -94,16 +95,16 @@ export const RegisterPage: React.FC = () => {
           <Input
             label="Email Address"
             type="email"
-            placeholder="you@example.com"
+            placeholder="citizen@example.com"
             leftIcon={<Mail className="w-4 h-4" />}
             error={errors.email?.message}
             {...register('email')}
           />
 
           <Input
-            label="Phone Number (Optional)"
+            label="Mobile Contact (Optional)"
             type="tel"
-            placeholder="+1 555-0199"
+            placeholder="+91 98765 43210"
             leftIcon={<Phone className="w-4 h-4" />}
             error={errors.phone?.message}
             {...register('phone')}
@@ -130,22 +131,22 @@ export const RegisterPage: React.FC = () => {
           <Button
             type="submit"
             variant="primary"
-            size="lg"
+            size="md"
             isLoading={loading}
-            leftIcon={<UserPlus className="w-4 h-4" />}
-            className="w-full mt-4"
+            leftIcon={<UserPlus className="w-4 h-4 text-[#C59B27]" />}
+            className="w-full mt-2 font-bold uppercase tracking-wider text-xs"
           >
-            Create Account
+            Register Citizen Profile
           </Button>
         </form>
 
-        <div className="text-center pt-2 text-xs text-slate-500 dark:text-slate-400">
-          Already have an account?{' '}
+        <div className="text-center pt-2 text-xs text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800">
+          Already possess a registered account?{' '}
           <Link
             to="/login"
-            className="font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
+            className="font-bold text-[#1B365D] hover:underline dark:text-blue-400"
           >
-            Sign In
+            Sign In to Portal
           </Link>
         </div>
       </div>

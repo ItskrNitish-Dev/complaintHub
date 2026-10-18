@@ -13,7 +13,8 @@ import {
   X,
   ArrowRight,
   ArrowLeft,
-  AlertCircle,
+  Landmark,
+  ShieldCheck,
 } from 'lucide-react';
 import { categoriesApi } from '../../api/categories.api';
 import { complaintsApi } from '../../api/complaints.api';
@@ -176,6 +177,7 @@ export const ReportComplaintPage: React.FC = () => {
 
       const res = await complaintsApi.createComplaint(formData);
       if (res.success && res.data) {
+        toast.success('Grievance registered successfully');
         navigate(`/complaints/${res.data._id}`);
       }
     } catch (err: any) {
@@ -195,23 +197,27 @@ export const ReportComplaintPage: React.FC = () => {
         <BackButton fallbackUrl="/dashboard" />
       </div>
 
-      {/* Title */}
-      <div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-          Report a Civic Issue
+      {/* Official Government Form Title */}
+      <div className="bg-white dark:bg-[#131E2D] p-5 sm:p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs border-t-4 border-t-[#C59B27] space-y-2">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#0F2537] text-[#C59B27] text-[10px] font-bold uppercase tracking-wider">
+          <Landmark className="w-3.5 h-3.5" />
+          Official Citizen Redressal Portal
+        </div>
+        <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#0F2537] dark:text-white">
+          Lodge Civic Grievance
         </h1>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-          Provide accurate details and photos to help municipal authorities dispatch crews quickly
+        <p className="text-xs text-slate-500 dark:text-slate-400">
+          Provide accurate municipal details and geotagged photographic evidence for official division dispatch
         </p>
       </div>
 
       {/* Stepper Progress Bar */}
       <div className="grid grid-cols-4 gap-2 text-center">
         {[
-          { num: 1, label: 'Issue Details', icon: FileText },
-          { num: 2, label: 'Location', icon: MapPin },
-          { num: 3, label: 'Evidence', icon: Camera },
-          { num: 4, label: 'Review', icon: CheckCircle2 },
+          { num: 1, label: 'Grievance Info', icon: FileText },
+          { num: 2, label: 'Ward Location', icon: MapPin },
+          { num: 3, label: 'Photo Evidence', icon: Camera },
+          { num: 4, label: 'Audit & Submit', icon: CheckCircle2 },
         ].map((s) => {
           const Icon = s.icon;
           const isCurrent = step === s.num;
@@ -222,18 +228,18 @@ export const ReportComplaintPage: React.FC = () => {
               onClick={() => {
                 if (isDone) setStep(s.num);
               }}
-              className={`p-3 rounded-2xl border transition-all ${
-                isDone ? 'cursor-pointer hover:border-blue-400' : ''
+              className={`p-3 rounded-lg border transition-all ${
+                isDone ? 'cursor-pointer hover:border-[#1B365D]' : ''
               } ${
                 isCurrent
-                  ? 'border-blue-600 bg-blue-50/50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 font-bold'
+                  ? 'border-[#1B365D] bg-[#1B365D] text-white font-bold shadow-xs'
                   : isDone
-                  ? 'border-emerald-200 bg-emerald-50/30 text-emerald-700 dark:border-emerald-900 dark:text-emerald-400'
-                  : 'border-slate-200 dark:border-slate-800 text-slate-400'
+                  ? 'border-emerald-300 bg-emerald-50 text-[#047857] dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300'
+                  : 'border-slate-200 dark:border-slate-800 text-slate-400 bg-white dark:bg-[#131E2D]'
               }`}
             >
               <Icon className="w-4 h-4 mx-auto mb-1" />
-              <span className="text-[11px] block truncate">{s.label}</span>
+              <span className="text-[10px] font-semibold block truncate uppercase tracking-wider">{s.label}</span>
             </div>
           );
         })}
@@ -247,17 +253,17 @@ export const ReportComplaintPage: React.FC = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* Step 1: Issue Details */}
             {step === 1 && (
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <div className="border-b border-slate-100 dark:border-slate-800 pb-3">
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                    Step 1: Issue Information
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-[#0F2537] dark:text-white">
+                    Step 1: Grievance Information
                   </h3>
-                  <p className="text-xs text-slate-500">Describe the problem and specify its urgency.</p>
+                  <p className="text-xs text-slate-500">Categorize the civic hazard and designate perceived urgency.</p>
                 </div>
 
                 <Input
-                  label="Complaint Title"
-                  placeholder="e.g. Hazardous deep pothole on Elm St"
+                  label="Grievance Title / Short Subject"
+                  placeholder="e.g. Hazardous deep pothole on MG Road crossing"
                   error={errors.title?.message}
                   {...register('title')}
                 />
@@ -265,11 +271,11 @@ export const ReportComplaintPage: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Category */}
                   <div className="space-y-1.5 text-left">
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-200">
-                      Category <span className="text-rose-500">*</span>
+                    <label className="block text-xs font-semibold text-[#0F2537] dark:text-slate-200 uppercase tracking-wider">
+                      Department Category <span className="text-[#DC2626]">*</span>
                     </label>
                     <select
-                      className="block w-full py-2.5 px-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                      className="block w-full py-2 px-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#131E2D] text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-[#1B365D]"
                       {...register('category')}
                     >
                       {categories.map((c) => (
@@ -279,7 +285,7 @@ export const ReportComplaintPage: React.FC = () => {
                       ))}
                     </select>
                     {errors.category && (
-                      <p className="text-xs text-rose-500 font-medium">
+                      <p className="text-xs text-[#DC2626] font-medium">
                         {errors.category.message}
                       </p>
                     )}
@@ -287,34 +293,34 @@ export const ReportComplaintPage: React.FC = () => {
 
                   {/* Priority */}
                   <div className="space-y-1.5 text-left">
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-200">
-                      Priority Level
+                    <label className="block text-xs font-semibold text-[#0F2537] dark:text-slate-200 uppercase tracking-wider">
+                      Perceived Severity Level
                     </label>
                     <select
-                      className="block w-full py-2.5 px-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                      className="block w-full py-2 px-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#131E2D] text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-[#1B365D]"
                       {...register('priority')}
                     >
-                      <option value="LOW">Low (Cosmetic / minor)</option>
-                      <option value="MEDIUM">Medium (General inconvenience)</option>
-                      <option value="HIGH">High (Active disruption / hazard)</option>
-                      <option value="CRITICAL">Critical (Immediate safety threat)</option>
+                      <option value="LOW">Low (Cosmetic / routine repair)</option>
+                      <option value="MEDIUM">Medium (Public inconvenience)</option>
+                      <option value="HIGH">High (Active disruption / structural risk)</option>
+                      <option value="CRITICAL">Critical (Immediate safety threat / emergency)</option>
                     </select>
                   </div>
                 </div>
 
                 {/* Description */}
                 <div className="space-y-1.5 text-left">
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-200">
-                    Detailed Description <span className="text-rose-500">*</span>
+                  <label className="block text-xs font-semibold text-[#0F2537] dark:text-slate-200 uppercase tracking-wider">
+                    Detailed Grievance Description <span className="text-[#DC2626]">*</span>
                   </label>
                   <textarea
                     rows={4}
-                    placeholder="Provide specific details about size, how long it has been present, and any immediate risks to residents..."
-                    className="block w-full p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    placeholder="Provide specific details about dimensions, duration of hazard, and any potential threat to motorists or pedestrians..."
+                    className="block w-full p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#131E2D] text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-[#1B365D]"
                     {...register('description')}
                   />
                   {errors.description && (
-                    <p className="text-xs text-rose-500 font-medium">
+                    <p className="text-xs text-[#DC2626] font-medium">
                       {errors.description.message}
                     </p>
                   )}
@@ -324,19 +330,19 @@ export const ReportComplaintPage: React.FC = () => {
 
             {/* Step 2: Location */}
             {step === 2 && (
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <div className="border-b border-slate-100 dark:border-slate-800 pb-3">
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                    Step 2: Location Details
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-[#0F2537] dark:text-white">
+                    Step 2: Geographic & Municipal Location
                   </h3>
-                  <p className="text-xs text-slate-500">Provide exact street and geographical coordinates.</p>
+                  <p className="text-xs text-slate-500">Provide exact street and geographical GPS coordinates for the dispatch team.</p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 flex flex-col sm:flex-row items-center justify-between gap-3">
-                  <div className="text-xs text-blue-900 dark:text-blue-300 text-left">
-                    <p className="font-bold">Auto-Detect GPS Location</p>
-                    <p className="text-blue-700 dark:text-blue-400">
-                      Use your current device position for high geographical accuracy.
+                <div className="p-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-3">
+                  <div className="text-xs text-slate-700 dark:text-slate-300 text-left">
+                    <p className="font-bold text-[#0F2537] dark:text-white">Auto-Detect GPS Geotag</p>
+                    <p className="text-slate-500 text-[11px]">
+                      Capture device coordinates to assist officers in locating the exact defect site.
                     </p>
                   </div>
                   <Button
@@ -345,9 +351,9 @@ export const ReportComplaintPage: React.FC = () => {
                     size="sm"
                     isLoading={isLocating}
                     onClick={handleDetectLocation}
-                    leftIcon={<Navigation className="w-4 h-4" />}
+                    leftIcon={<Navigation className="w-3.5 h-3.5 text-[#C59B27]" />}
                   >
-                    {locationSuccess ? 'Location Detected ✓' : 'Detect GPS'}
+                    {locationSuccess ? 'Geotagged ✓' : 'Detect GPS Coordinates'}
                   </Button>
                 </div>
 
@@ -369,15 +375,15 @@ export const ReportComplaintPage: React.FC = () => {
                 </div>
 
                 <Input
-                  label="Street Address / Road Name"
-                  placeholder="e.g. 742 Evergreen Terrace"
+                  label="Street Address / Road Segment"
+                  placeholder="e.g. Ward 12, Main Ring Road near Pillar 42"
                   error={errors.address?.message}
                   {...register('address')}
                 />
 
                 <Input
-                  label="Nearby Landmark (Optional)"
-                  placeholder="e.g. Opposite Central Metro Station Gate 2"
+                  label="Prominent Civic Landmark (Optional)"
+                  placeholder="e.g. Opposite Government Primary School Gate"
                   error={errors.landmark?.message}
                   {...register('landmark')}
                 />
@@ -386,21 +392,21 @@ export const ReportComplaintPage: React.FC = () => {
 
             {/* Step 3: Evidence */}
             {step === 3 && (
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <div className="border-b border-slate-100 dark:border-slate-800 pb-3">
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                    Step 3: Photographic Evidence
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-[#0F2537] dark:text-white">
+                    Step 3: Photographic Proof
                   </h3>
-                  <p className="text-xs text-slate-500">Upload photos of the problem (up to 5 images, max 5MB each).</p>
+                  <p className="text-xs text-slate-500">Upload photos of the defect (up to 5 images, max 5MB each). Photographic proof speeds up municipal triage.</p>
                 </div>
 
-                <label className="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:border-blue-500 transition-colors">
-                  <Upload className="w-8 h-8 text-slate-400 mb-2" />
-                  <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-                    Click to select images from your device
+                <label className="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:border-[#1B365D] transition-colors">
+                  <Upload className="w-8 h-8 text-[#C59B27] mb-2" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#0F2537] dark:text-slate-200">
+                    Click to select evidence files
                   </span>
-                  <span className="text-xs text-slate-400 mt-1">
-                    Supports JPEG, PNG, WebP
+                  <span className="text-[11px] text-slate-400 mt-1">
+                    Accepts JPEG, PNG, WebP format
                   </span>
                   <input
                     type="file"
@@ -413,19 +419,19 @@ export const ReportComplaintPage: React.FC = () => {
 
                 {previewUrls.length > 0 && (
                   <div className="space-y-2">
-                    <p className="text-xs font-semibold text-slate-600 dark:text-slate-300">
-                      Selected Photos ({previewUrls.length} / 5):
+                    <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      Attached Proof Files ({previewUrls.length} / 5):
                     </p>
                     <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
                       {previewUrls.map((url, idx) => (
-                        <div key={idx} className="relative aspect-square rounded-xl overflow-hidden group">
+                        <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 group">
                           <img src={url} alt="Evidence preview" className="w-full h-full object-cover" />
                           <button
                             type="button"
                             onClick={() => removeFile(idx)}
-                            className="absolute top-1 right-1 p-1 rounded-full bg-slate-900/80 text-white hover:bg-rose-600 transition-colors"
+                            className="absolute top-1 right-1 p-1 rounded-full bg-[#0F2537]/90 text-white hover:bg-rose-600 transition-colors cursor-pointer"
                           >
-                            <X className="w-3.5 h-3.5" />
+                            <X className="w-3 h-3" />
                           </button>
                         </div>
                       ))}
@@ -437,53 +443,53 @@ export const ReportComplaintPage: React.FC = () => {
 
             {/* Step 4: Review & Submit */}
             {step === 4 && (
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <div className="border-b border-slate-100 dark:border-slate-800 pb-3">
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                    Step 4: Review Your Report
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-[#0F2537] dark:text-white">
+                    Step 4: Formal Grievance Audit
                   </h3>
-                  <p className="text-xs text-slate-500">Ensure all information is accurate before submitting.</p>
+                  <p className="text-xs text-slate-500">Review all information prior to official registration into the municipal registry.</p>
                 </div>
 
-                <div className="space-y-4 text-xs bg-slate-50 dark:bg-slate-850 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 text-left">
+                <div className="space-y-3.5 text-xs bg-slate-50 dark:bg-slate-800/50 p-5 rounded-xl border border-slate-200 dark:border-slate-700 text-left">
                   <div>
-                    <span className="text-slate-400 font-semibold block uppercase text-[10px]">Title</span>
-                    <p className="text-sm font-bold text-slate-900 dark:text-white mt-0.5">{formValues.title}</p>
+                    <span className="text-slate-400 font-bold uppercase text-[10px]">Subject</span>
+                    <p className="text-sm font-bold text-[#0F2537] dark:text-white mt-0.5">{formValues.title}</p>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <span className="text-slate-400 font-semibold block uppercase text-[10px]">Category</span>
+                      <span className="text-slate-400 font-bold uppercase text-[10px]">Target Category</span>
                       <p className="font-semibold text-slate-800 dark:text-slate-200 mt-0.5">{selectedCategoryObj?.name}</p>
                     </div>
                     <div>
-                      <span className="text-slate-400 font-semibold block uppercase text-[10px]">Priority</span>
+                      <span className="text-slate-400 font-bold uppercase text-[10px]">Priority Severity</span>
                       <div className="mt-0.5"><Badge priority={formValues.priority} size="sm" /></div>
                     </div>
                   </div>
 
                   <div>
-                    <span className="text-slate-400 font-semibold block uppercase text-[10px]">Description</span>
+                    <span className="text-slate-400 font-bold uppercase text-[10px]">Description</span>
                     <p className="text-slate-700 dark:text-slate-300 mt-0.5 leading-relaxed">{formValues.description}</p>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <span className="text-slate-400 font-semibold block uppercase text-[10px]">Address</span>
+                      <span className="text-slate-400 font-bold uppercase text-[10px]">Address Location</span>
                       <p className="font-medium text-slate-800 dark:text-slate-200 mt-0.5">{formValues.address}</p>
                     </div>
                     <div>
-                      <span className="text-slate-400 font-semibold block uppercase text-[10px]">Coordinates</span>
+                      <span className="text-slate-400 font-bold uppercase text-[10px]">Geotag Coordinates</span>
                       <p className="font-mono text-slate-600 dark:text-slate-400 mt-0.5">{formValues.latitude}, {formValues.longitude}</p>
                     </div>
                   </div>
 
                   {previewUrls.length > 0 && (
                     <div>
-                      <span className="text-slate-400 font-semibold block uppercase text-[10px] mb-1">Attached Images</span>
+                      <span className="text-slate-400 font-bold uppercase text-[10px] mb-1 block">Attached Evidence ({previewUrls.length})</span>
                       <div className="flex gap-2">
                         {previewUrls.map((url, i) => (
-                          <img key={i} src={url} alt="" className="w-12 h-12 object-cover rounded-lg border" />
+                          <img key={i} src={url} alt="" className="w-12 h-12 object-cover rounded-md border border-slate-300" />
                         ))}
                       </div>
                     </div>
@@ -493,16 +499,16 @@ export const ReportComplaintPage: React.FC = () => {
             )}
 
             {/* Stepper Navigation Buttons */}
-            <div className="flex items-center justify-between pt-8 border-t border-slate-100 dark:border-slate-800 mt-6">
+            <div className="flex items-center justify-between pt-6 border-t border-slate-100 dark:border-slate-800 mt-6">
               {step > 1 ? (
                 <Button
                   type="button"
                   variant="outline"
-                  size="md"
+                  size="sm"
                   onClick={handlePrevStep}
-                  leftIcon={<ArrowLeft className="w-4 h-4" />}
+                  leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
                 >
-                  Previous
+                  Previous Step
                 </Button>
               ) : <div />}
 
@@ -510,21 +516,21 @@ export const ReportComplaintPage: React.FC = () => {
                 <Button
                   type="button"
                   variant="primary"
-                  size="md"
+                  size="sm"
                   onClick={handleNextStep}
-                  rightIcon={<ArrowRight className="w-4 h-4" />}
+                  rightIcon={<ArrowRight className="w-3.5 h-3.5 text-[#C59B27]" />}
                 >
-                  Next Step
+                  Proceed to Next Step
                 </Button>
               ) : (
                 <Button
                   type="submit"
                   variant="primary"
-                  size="lg"
+                  size="md"
                   isLoading={isSubmitting}
-                  leftIcon={<CheckCircle2 className="w-4 h-4" />}
+                  leftIcon={<CheckCircle2 className="w-4 h-4 text-[#C59B27]" />}
                 >
-                  Submit Complaint
+                  Confirm & Lodge Grievance
                 </Button>
               )}
             </div>

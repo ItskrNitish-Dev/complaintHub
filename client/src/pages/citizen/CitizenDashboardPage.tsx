@@ -11,6 +11,8 @@ import {
   Bell,
   ThumbsUp,
   MapPin,
+  Landmark,
+  ShieldCheck,
 } from 'lucide-react';
 import { complaintsApi } from '../../api/complaints.api';
 import { notificationsApi } from '../../api/notifications.api';
@@ -64,123 +66,119 @@ export const CitizenDashboardPage: React.FC = () => {
   ).length;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 text-left">
       {/* Top Welcome Header & Quick Action */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white dark:bg-[#131E2D] p-5 sm:p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-l-4 border-l-[#1B365D]">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Welcome back, {user?.name}
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#0F2537] text-[#C59B27] text-[10px] font-bold uppercase tracking-wider mb-1.5">
+            <Landmark className="w-3 h-3" />
+            Citizen Redressal Workbench
+          </div>
+          <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#0F2537] dark:text-white">
+            Welcome, {user?.name}
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Track your submitted civic issues and updates from municipal authorities
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            Official municipal tracking portal for your neighborhood grievances
           </p>
         </div>
 
         <Link
           to="/complaints/new"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-all"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#1B365D] hover:bg-[#0F2537] text-white text-xs font-bold uppercase tracking-wider shadow-xs transition-colors border border-blue-900 self-start sm:self-auto"
         >
-          <PlusCircle className="w-4 h-4" />
-          Report New Issue
+          <PlusCircle className="w-4 h-4 text-[#C59B27]" />
+          Lodge New Grievance
         </Link>
       </div>
 
-      {/* 4 Stat Counter Cards (PRD Section 33) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        <Card>
-          <CardContent className="p-5 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
-              <FileText className="w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Total Reported</p>
-              <h3 className="text-2xl font-extrabold text-slate-900 dark:text-white mt-0.5">
-                {totalCount}
-              </h3>
-            </div>
-          </CardContent>
-        </Card>
+      {/* 4 Stat Counter Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white dark:bg-[#131E2D] p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-lg bg-slate-100 dark:bg-slate-800 text-[#0F2537] dark:text-slate-200 flex items-center justify-center shrink-0 border border-slate-200 dark:border-slate-700">
+            <FileText className="w-5 h-5 text-[#1B365D] dark:text-blue-400" />
+          </div>
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Total Lodged</p>
+            <h3 className="text-xl sm:text-2xl font-extrabold text-[#0F2537] dark:text-white mt-0.5">
+              {totalCount}
+            </h3>
+          </div>
+        </div>
 
-        <Card>
-          <CardContent className="p-5 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
-              <Clock className="w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Pending Review</p>
-              <h3 className="text-2xl font-extrabold text-amber-600 dark:text-amber-400 mt-0.5">
-                {pendingCount}
-              </h3>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="bg-white dark:bg-[#131E2D] p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-lg bg-amber-50 dark:bg-amber-950/50 text-[#B45309] dark:text-amber-300 flex items-center justify-center shrink-0 border border-amber-200 dark:border-amber-800">
+            <Clock className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Under Review</p>
+            <h3 className="text-xl sm:text-2xl font-extrabold text-[#B45309] dark:text-amber-400 mt-0.5">
+              {pendingCount}
+            </h3>
+          </div>
+        </div>
 
-        <Card>
-          <CardContent className="p-5 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
-              <AlertCircle className="w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-xs font-medium text-slate-500 dark:text-slate-400">In Progress</p>
-              <h3 className="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-0.5">
-                {inProgressCount}
-              </h3>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="bg-white dark:bg-[#131E2D] p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-lg bg-blue-50 dark:bg-blue-950/50 text-[#1B365D] dark:text-blue-300 flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-800">
+            <AlertCircle className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">In Progress</p>
+            <h3 className="text-xl sm:text-2xl font-extrabold text-[#1B365D] dark:text-blue-400 mt-0.5">
+              {inProgressCount}
+            </h3>
+          </div>
+        </div>
 
-        <Card>
-          <CardContent className="p-5 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-              <CheckCircle className="w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Resolved</p>
-              <h3 className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-0.5">
-                {resolvedCount}
-              </h3>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="bg-white dark:bg-[#131E2D] p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 text-[#047857] dark:text-emerald-300 flex items-center justify-center shrink-0 border border-emerald-200 dark:border-emerald-800">
+            <CheckCircle className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Verified Resolved</p>
+            <h3 className="text-xl sm:text-2xl font-extrabold text-[#047857] dark:text-emerald-400 mt-0.5">
+              {resolvedCount}
+            </h3>
+          </div>
+        </div>
       </div>
 
       {/* Main Grid: My Complaints & Recent Alerts */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         {/* Left 2 Cols: My Complaints List */}
         <div className="lg:col-span-2 space-y-4">
           {/* Tabs */}
-          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 rounded-xl p-1 w-fit">
+          <div className="flex items-center gap-1.5 bg-slate-200/70 dark:bg-slate-800/80 rounded-lg p-1 w-fit">
             <button
               type="button"
               onClick={() => setActiveTab('mine')}
-              className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`px-3.5 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
                 activeTab === 'mine'
-                  ? 'bg-white dark:bg-slate-900 text-blue-600 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                  ? 'bg-[#1B365D] text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'
               }`}
             >
-              My Reports
+              My Lodged Grievances ({myComplaints.length})
             </button>
             <button
               type="button"
               onClick={() => setActiveTab('followed')}
-              className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`px-3.5 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
                 activeTab === 'followed'
-                  ? 'bg-white dark:bg-slate-900 text-blue-600 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                  ? 'bg-[#1B365D] text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'
               }`}
             >
-              <Bookmark className="w-3 h-3 inline mr-1" />
-              Followed ({followedComplaints.length})
+              <Bookmark className="w-3 h-3 inline mr-1 text-[#C59B27]" />
+              Followed Grievances ({followedComplaints.length})
             </button>
           </div>
 
-          <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-slate-900 dark:text-white">
-              {activeTab === 'mine' ? 'My Reported Complaints' : 'Complaints I Follow'}
+          <div className="flex items-center justify-between pt-1">
+            <h2 className="text-sm font-bold uppercase tracking-wider text-[#0F2537] dark:text-white">
+              {activeTab === 'mine' ? 'Official Case Dossier' : 'Community Cases Under Watch'}
             </h2>
-            <Link to="/complaints" className="text-xs font-semibold text-blue-600 hover:text-blue-500 flex items-center gap-1">
-              Explore all <ArrowRight className="w-3.5 h-3.5" />
+            <Link to="/complaints" className="text-xs font-bold text-[#1B365D] hover:text-[#0F2537] dark:text-blue-400 flex items-center gap-1">
+              Public Registry <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
@@ -191,7 +189,7 @@ export const CitizenDashboardPage: React.FC = () => {
               return (
                 <div className="space-y-3">
                   {[1, 2, 3].map((n) => (
-                    <div key={n} className="h-24 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 animate-pulse" />
+                    <div key={n} className="h-24 bg-white dark:bg-[#131E2D] rounded-xl border border-slate-200 dark:border-slate-800 animate-pulse" />
                   ))}
                 </div>
               );
@@ -200,23 +198,23 @@ export const CitizenDashboardPage: React.FC = () => {
               return (
                 <Card>
                   <CardContent className="py-12 text-center space-y-3">
-                    <div className="w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-600 flex items-center justify-center mx-auto">
+                    <div className="w-12 h-12 rounded-lg bg-slate-100 dark:bg-slate-800 text-[#1B365D] dark:text-blue-400 flex items-center justify-center mx-auto">
                       {activeTab === 'mine' ? <PlusCircle className="w-6 h-6" /> : <Bookmark className="w-6 h-6" />}
                     </div>
-                    <h4 className="font-semibold text-sm text-slate-900 dark:text-white">
-                      {activeTab === 'mine' ? "You haven't filed any complaints yet" : "You aren't following any complaints yet"}
+                    <h4 className="font-bold text-sm text-[#0F2537] dark:text-white">
+                      {activeTab === 'mine' ? "No complaints currently filed on your record" : "You are not currently monitoring any public cases"}
                     </h4>
-                    <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                    <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
                       {activeTab === 'mine'
-                        ? 'Notice a pothole, broken streetlight, or garbage issue? Report it today!'
-                        : 'Browse complaints and click "Follow" to track updates on issues you care about.'}
+                        ? 'Observe a civic hazard like an open manhole, water main burst, or broken streetlight? Lodge a report for municipal dispatch.'
+                        : 'Explore public complaints in your municipal ward and click "Follow" to receive verified status updates.'}
                     </p>
                     <div className="pt-2">
                       <Link
                         to={activeTab === 'mine' ? '/complaints/new' : '/complaints'}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-semibold"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#1B365D] hover:bg-[#0F2537] text-white text-xs font-bold uppercase tracking-wider shadow-xs"
                       >
-                        {activeTab === 'mine' ? <><PlusCircle className="w-4 h-4" /> File your first report</> : <>Explore complaints</>}
+                        {activeTab === 'mine' ? <><PlusCircle className="w-4 h-4 text-[#C59B27]" /> Lodge First Grievance</> : <>Browse Public Registry</>}
                       </Link>
                     </div>
                   </CardContent>
@@ -229,29 +227,29 @@ export const CitizenDashboardPage: React.FC = () => {
                   <Link
                     key={c._id}
                     to={`/complaints/${c._id}`}
-                    className="block p-4 sm:p-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-blue-400 dark:hover:border-blue-600 shadow-xs hover:shadow-md transition-all group"
+                    className="block p-4 sm:p-5 bg-white dark:bg-[#131E2D] rounded-xl border border-slate-200 dark:border-slate-800 hover:border-[#C59B27] dark:hover:border-[#C59B27] shadow-xs hover:shadow-sm transition-all group"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                        <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-[#0F2537] text-white border border-[#C59B27]/40">
                           {c.complaintNumber}
                         </span>
-                        <span className="text-xs text-slate-500 font-medium">{c.category?.name || 'General'}</span>
+                        <span className="text-xs text-slate-500 font-bold uppercase tracking-wide">{c.category?.name || 'General Municipal'}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Badge priority={c.priority} size="sm" />
                         <Badge status={c.status} size="sm" />
                       </div>
                     </div>
-                    <h3 className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{c.title}</h3>
+                    <h3 className="font-bold text-sm text-[#0F2537] dark:text-white group-hover:text-[#1B365D] dark:group-hover:text-blue-400 transition-colors">{c.title}</h3>
                     <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-1">{c.description}</p>
                     <div className="flex items-center justify-between pt-3 mt-3 border-t border-slate-100 dark:border-slate-800/80 text-[11px] text-slate-400">
                       <span className="flex items-center gap-1 truncate max-w-[200px]">
-                        <MapPin className="w-3 h-3 text-slate-400" />
-                        {c.location?.address || 'Reported Location'}
+                        <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                        {c.location?.address || 'Municipal Ward'}
                       </span>
-                      <span className="flex items-center gap-1 font-medium text-slate-600 dark:text-slate-300">
-                        <ThumbsUp className="w-3 h-3 text-blue-600" /> {c.upvoteCount} votes
+                      <span className="flex items-center gap-1 font-semibold text-[#1B365D] dark:text-blue-400">
+                        <ThumbsUp className="w-3.5 h-3.5" /> {c.upvoteCount} votes
                       </span>
                     </div>
                   </Link>
@@ -264,33 +262,33 @@ export const CitizenDashboardPage: React.FC = () => {
         {/* Right Col: Notification & Action Stream */}
         <div className="space-y-6">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-3">
-              <CardTitle className="text-base flex items-center gap-2">
-                <Bell className="w-4 h-4 text-blue-600" />
-                Latest Alerts
+            <CardHeader className="flex flex-row items-center justify-between pb-3 bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800">
+              <CardTitle className="text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-[#0F2537] dark:text-white">
+                <Bell className="w-3.5 h-3.5 text-[#C59B27]" />
+                Official Notices
               </CardTitle>
               <Link
                 to="/notifications"
-                className="text-xs font-semibold text-blue-600 hover:text-blue-500"
+                className="text-[11px] font-bold text-[#1B365D] hover:underline dark:text-blue-400"
               >
-                View all
+                All Notices
               </Link>
             </CardHeader>
             <CardContent className="divide-y divide-slate-100 dark:divide-slate-800/80 pt-0">
               {notifications.length === 0 ? (
                 <p className="py-6 text-center text-xs text-slate-400">
-                  No new notifications
+                  No active notices on file
                 </p>
               ) : (
                 notifications.map((n) => (
                   <div key={n._id} className="py-3 text-xs space-y-1">
-                    <p className="font-semibold text-slate-800 dark:text-slate-200">
+                    <p className="font-bold text-[#0F2537] dark:text-slate-200">
                       {n.title}
                     </p>
-                    <p className="text-slate-500 dark:text-slate-400 line-clamp-2">
+                    <p className="text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
                       {n.message}
                     </p>
-                    <span className="text-[10px] text-slate-400 block pt-1">
+                    <span className="text-[10px] text-slate-400 font-mono block pt-0.5">
                       {new Date(n.createdAt).toLocaleDateString()}
                     </span>
                   </div>
@@ -300,12 +298,12 @@ export const CitizenDashboardPage: React.FC = () => {
           </Card>
 
           {/* Quick Civic Tips Banner */}
-          <div className="p-5 rounded-2xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-900 text-xs space-y-2">
-            <h4 className="font-bold text-blue-900 dark:text-blue-300 flex items-center gap-1.5">
-              <Bookmark className="w-4 h-4 text-blue-600" /> Civic Tip
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 text-xs space-y-2">
+            <h4 className="font-bold text-[#0F2537] dark:text-slate-200 flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
+              <ShieldCheck className="w-4 h-4 text-[#C59B27]" /> Citizen Redressal Advisory
             </h4>
-            <p className="text-blue-800/80 dark:text-blue-200 leading-relaxed">
-              Attaching clear photos and providing specific street landmarks significantly speeds up officer triage and field inspection times.
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-[11px]">
+              Providing accurate street landmarks and attaching clear daylight photographs expedites municipal triage and reduces on-site verification delays.
             </p>
           </div>
         </div>

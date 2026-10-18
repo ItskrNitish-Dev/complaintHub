@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
-  ShieldAlert,
+  Landmark,
   ArrowRight,
-  CheckCircle,
+  CheckCircle2,
   Clock,
   ThumbsUp,
   MapPin,
@@ -14,9 +14,11 @@ import {
   Compass,
   Zap,
   Users,
-  Building,
-  PlusCircle,
+  ShieldCheck,
   Search,
+  PlusCircle,
+  FileText,
+  Building2,
 } from 'lucide-react';
 import { complaintsApi } from '../../api/complaints.api';
 import { categoriesApi } from '../../api/categories.api';
@@ -24,12 +26,14 @@ import { Complaint, Category } from '../../types';
 import { Badge } from '../../components/ui/Badge';
 
 export const LandingPage: React.FC = () => {
+  const navigate = useNavigate();
   const [recentComplaints, setRecentComplaints] = useState<Complaint[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [trackQuery, setTrackQuery] = useState('');
   const [stats, setStats] = useState({
-    total: 1240,
-    resolved: 1115,
-    officers: 48,
+    total: 1420,
+    resolved: 1285,
+    officers: 52,
     responseTime: '< 24 Hours',
   });
   const [isLoading, setIsLoading] = useState(true);
@@ -65,147 +69,198 @@ export const LandingPage: React.FC = () => {
     fetchData();
   }, []);
 
+  const handleTrackSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (trackQuery.trim()) {
+      navigate(`/complaints?search=${encodeURIComponent(trackQuery.trim())}`);
+    }
+  };
+
   const getCategoryIcon = (iconName?: string) => {
     switch (iconName) {
       case 'AlertTriangle':
-        return <AlertTriangle className="w-5 h-5 text-amber-500" />;
+        return <AlertTriangle className="w-5 h-5 text-[#B45309]" />;
       case 'Trash2':
-        return <Trash2 className="w-5 h-5 text-emerald-500" />;
+        return <Trash2 className="w-5 h-5 text-[#047857]" />;
       case 'Droplets':
-        return <Droplets className="w-5 h-5 text-blue-500" />;
+        return <Droplets className="w-5 h-5 text-[#0369A1]" />;
       case 'Lightbulb':
-        return <Lightbulb className="w-5 h-5 text-yellow-500" />;
+        return <Lightbulb className="w-5 h-5 text-[#C59B27]" />;
       case 'Compass':
-        return <Compass className="w-5 h-5 text-indigo-500" />;
+        return <Compass className="w-5 h-5 text-indigo-700" />;
       case 'Zap':
         return <Zap className="w-5 h-5 text-amber-600" />;
       default:
-        return <AlertTriangle className="w-5 h-5 text-blue-500" />;
+        return <Building2 className="w-5 h-5 text-[#1B365D]" />;
     }
   };
 
   return (
-    <div className="space-y-24 pb-20">
-      {/* 1. Hero Section */}
-      <section className="relative overflow-hidden pt-12 md:pt-20">
-        {/* Subtle background glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
+    <div className="space-y-16 sm:space-y-20 pb-20">
+      {/* 1. Official Civic Hero Section */}
+      <section className="bg-gradient-to-b from-[#0F2537] via-[#142C42] to-[#1B365D] text-white pt-12 pb-16 md:pt-16 md:pb-24 border-b-4 border-[#C59B27] relative overflow-hidden">
+        {/* Subtle patterned background */}
+        <div className="absolute inset-0 opacity-5 bg-[radial-gradient(#C59B27_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
 
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-200 dark:border-blue-900 bg-blue-50/80 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 text-xs font-semibold tracking-wide">
-            <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-            Empowering Transparent Municipal Governance
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-7 relative z-10">
+          {/* Official Emblem Banner */}
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#C59B27]/50 bg-[#0F2537]/80 text-[#C59B27] text-xs font-bold tracking-wider uppercase shadow-xs">
+            <Landmark className="w-3.5 h-3.5 text-[#C59B27]" />
+            Civic Grievance Redressal & Public Works Monitoring Portal
           </div>
 
-          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
-            Report. Track. <span className="text-blue-600 dark:text-blue-500">Resolve.</span>
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-white">
+            Civic Accountability. <span className="text-[#C59B27]">Transparent Redressal.</span>
           </h1>
 
-          <p className="max-w-2xl mx-auto text-lg sm:text-xl text-slate-600 dark:text-slate-300 font-normal leading-relaxed">
-            Make your community better by reporting civic issues and tracking their resolution from one place.
+          <p className="max-w-2xl mx-auto text-sm sm:text-base text-slate-200 font-normal leading-relaxed">
+            A centralized digital platform for citizens to lodge civic infrastructure complaints, track real-time resolution by municipal departments, and hold public services accountable.
           </p>
 
-          {/* Primary Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+          {/* Quick Track Grievance Box (Classic Government Portal Feature) */}
+          <div className="max-w-2xl mx-auto pt-2">
+            <form
+              onSubmit={handleTrackSubmit}
+              className="p-2 sm:p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-xl flex flex-col sm:flex-row items-center gap-2"
+            >
+              <div className="relative flex-1 w-full">
+                <Search className="w-4 h-4 text-slate-300 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={trackQuery}
+                  onChange={(e) => setTrackQuery(e.target.value)}
+                  placeholder="Enter Complaint Token (e.g. CMP-...) or keyword to track"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-white text-slate-900 placeholder-slate-500 text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#C59B27]"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-[#C59B27] hover:bg-[#B0881E] text-white font-bold text-xs uppercase tracking-wider transition-colors shrink-0 shadow-xs cursor-pointer"
+              >
+                Track Status
+              </button>
+            </form>
+            <p className="text-[11px] text-slate-300 mt-2 text-left sm:text-center">
+              Quick access: Enter your unique grievance registration token to view current field inspection status and remarks.
+            </p>
+          </div>
+
+          {/* Action CTAs */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
             <Link
               to="/complaints/new"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-base font-semibold rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all hover:-translate-y-0.5"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 text-xs sm:text-sm font-bold uppercase tracking-wider rounded-lg bg-white text-[#0F2537] hover:bg-slate-100 transition-all shadow-md"
             >
-              <PlusCircle className="w-5 h-5" />
-              Report an Issue
+              <PlusCircle className="w-4 h-4 text-[#C59B27]" />
+              Lodge New Grievance
             </Link>
 
             <Link
               to="/complaints"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-base font-semibold rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-xs transition-all"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 text-xs sm:text-sm font-bold uppercase tracking-wider rounded-lg border border-white/30 text-white hover:bg-white/10 transition-all"
             >
-              <Search className="w-5 h-5 text-slate-400" />
-              Explore Complaints
+              <FileText className="w-4 h-4 text-amber-300" />
+              Browse Public Grievance Registry
             </Link>
           </div>
+        </div>
+      </section>
 
-          {/* Key Metric Strip */}
-          <div className="pt-10 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto border-t border-slate-200/80 dark:border-slate-800">
-            <div>
-              <p className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
-                {stats.total}+
-              </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Total Reported</p>
+      {/* 2. Official Key Metrics Strip */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-14 relative z-20">
+        <div className="bg-white dark:bg-[#131E2D] rounded-xl border border-slate-200 dark:border-slate-800 shadow-md p-6 grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+          <div className="border-r last:border-r-0 border-slate-200 dark:border-slate-800 px-2">
+            <div className="text-2xl sm:text-3xl font-extrabold text-[#0F2537] dark:text-white">
+              {stats.total.toLocaleString()}+
             </div>
-            <div>
-              <p className="text-2xl sm:text-3xl font-bold text-emerald-600 dark:text-emerald-400">
-                {stats.resolved}+
-              </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Verified Resolved</p>
+            <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mt-1">
+              Grievances Lodged
             </div>
-            <div>
-              <p className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
-                {stats.officers}
-              </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Active Officers</p>
+          </div>
+          <div className="border-r last:border-r-0 border-slate-200 dark:border-slate-800 px-2">
+            <div className="text-2xl sm:text-3xl font-extrabold text-[#059669]">
+              {stats.resolved.toLocaleString()}+
             </div>
-            <div>
-              <p className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">
-                {stats.responseTime}
-              </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Avg. First Response</p>
+            <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mt-1">
+              Verified Resolved
+            </div>
+          </div>
+          <div className="border-r last:border-r-0 border-slate-200 dark:border-slate-800 px-2">
+            <div className="text-2xl sm:text-3xl font-extrabold text-[#1B365D] dark:text-blue-400">
+              {stats.officers}
+            </div>
+            <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mt-1">
+              Designated Field Officers
+            </div>
+          </div>
+          <div className="px-2">
+            <div className="text-2xl sm:text-3xl font-extrabold text-[#C59B27]">
+              {stats.responseTime}
+            </div>
+            <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mt-1">
+              Average Redressal SLA
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. How It Works Section */}
+      {/* 3. Citizen Grievance Lifecycle (How It Works) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center space-y-3 mb-12">
-          <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-            How ComplaintHub Works
+        <div className="border-l-4 border-[#C59B27] pl-4 mb-8">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Citizen Grievance Lifecycle
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F2537] dark:text-white tracking-tight mt-0.5">
+            Four Steps to Municipal Resolution
           </h2>
-          <p className="text-slate-500 dark:text-slate-400 max-w-xl mx-auto text-sm">
-            Four transparent steps from public reporting to on-the-ground municipal resolution.
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
+            Complaints submitted via ComplaintHub follow standard operating procedures for municipal review, inspection, and verified closure.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {[
             {
-              step: '01',
-              title: 'Spot & Report',
-              desc: 'Pin the location on the map, describe the issue, select a category, and upload photos directly from your phone.',
+              step: 'Step 01',
+              title: 'Lodge & Geotag',
+              desc: 'Submit detailed complaint with GPS coordinates, street address, category, and real photographic proof.',
               icon: MapPin,
             },
             {
-              step: '02',
-              title: 'Admin Verification',
-              desc: 'Municipal administrators review incoming reports, assess priority, and route them to the relevant department.',
-              icon: ShieldAlert,
+              step: 'Step 02',
+              title: 'Administrative Scrutiny',
+              desc: 'Municipal administrators audit the complaint, assess priority, and assign it to the responsible department.',
+              icon: ShieldCheck,
             },
             {
-              step: '03',
-              title: 'Officer Dispatch',
-              desc: 'Dedicated field officers receive the task, arrive on site, and transition the complaint status to in-progress.',
+              step: 'Step 03',
+              title: 'Field Officer Inspection',
+              desc: 'The designated officer visits the site, updates progress in real-time, and initiates municipal repair works.',
               icon: Users,
             },
             {
-              step: '04',
-              title: 'Transparent Resolution',
-              desc: 'Officers post photographic proof of repair. The citizen and public followers receive real-time status closure.',
-              icon: CheckCircle,
+              step: 'Step 04',
+              title: 'Closure with Proof',
+              desc: 'Officer uploads post-resolution photographic evidence. Citizen receives notification and closure verification.',
+              icon: CheckCircle2,
             },
           ].map((item, idx) => {
             const Icon = item.icon;
             return (
               <div
                 key={idx}
-                className="relative bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col justify-between"
+                className="bg-white dark:bg-[#131E2D] p-5 sm:p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between"
               >
                 <div>
-                  <span className="text-xs font-bold text-blue-600 dark:text-blue-400 font-mono tracking-wider">
-                    STEP {item.step}
-                  </span>
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center my-4">
-                    <Icon className="w-5 h-5" />
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-[#C59B27] uppercase tracking-wider font-mono">
+                      {item.step}
+                    </span>
+                    <span className="w-8 h-8 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[#1B365D] dark:text-blue-400">
+                      <Icon className="w-4 h-4" />
+                    </span>
                   </div>
-                  <h3 className="font-semibold text-base text-slate-900 dark:text-white">
+                  <h3 className="font-bold text-sm text-[#0F2537] dark:text-white mt-4">
                     {item.title}
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
@@ -218,22 +273,25 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 3. Popular Complaint Categories */}
+      {/* 4. Popular Grievance Categories */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4 border-l-4 border-[#1B365D] pl-4">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-              Popular Complaint Categories
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              Department Classification
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F2537] dark:text-white tracking-tight mt-0.5">
+              Grievance Categories
             </h2>
-            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
-              Select a category to explore existing reports or file a new problem.
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
+              Select an official municipal service domain to view open issues or file a report.
             </p>
           </div>
           <Link
             to="/complaints"
-            className="text-xs font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400 flex items-center gap-1"
+            className="text-xs font-bold uppercase tracking-wider text-[#1B365D] hover:text-[#0F2537] dark:text-blue-400 flex items-center gap-1"
           >
-            View all categories <ArrowRight className="w-3.5 h-3.5" />
+            All Categories <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
@@ -242,35 +300,41 @@ export const LandingPage: React.FC = () => {
             <Link
               key={cat._id}
               to={`/complaints?category=${cat._id}`}
-              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 hover:border-blue-400 dark:hover:border-blue-600 shadow-xs hover:shadow-md transition-all text-center flex flex-col items-center justify-center group"
+              className="p-4 rounded-xl bg-white dark:bg-[#131E2D] border border-slate-200 dark:border-slate-800 hover:border-[#C59B27] dark:hover:border-[#C59B27] shadow-xs hover:shadow-sm transition-all text-center flex flex-col items-center justify-center group"
             >
-              <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800/80 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <div className="w-11 h-11 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center mb-3 group-hover:border-[#C59B27] transition-colors">
                 {getCategoryIcon(cat.icon)}
               </div>
-              <h4 className="text-xs font-semibold text-slate-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+              <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-[#1B365D] dark:group-hover:text-blue-400 leading-snug">
                 {cat.name}
               </h4>
+              <span className="text-[10px] text-slate-400 mt-1 font-mono">
+                Municipal Wing
+              </span>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* 4. Recent Issues Showcase */}
+      {/* 5. Recently Reported Public Grievances */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4 border-l-4 border-[#C59B27] pl-4">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-              Recently Reported Issues
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              Live Municipal Feed
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F2537] dark:text-white tracking-tight mt-0.5">
+              Recently Lodged Grievances
             </h2>
-            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
-              Live civic problems currently progressing through the municipal resolution lifecycle.
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
+              Publicly visible civic issues currently undergoing administrative review and ground repairs.
             </p>
           </div>
           <Link
             to="/complaints"
-            className="text-xs font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400 flex items-center gap-1"
+            className="text-xs font-bold uppercase tracking-wider text-[#1B365D] hover:text-[#0F2537] dark:text-blue-400 flex items-center gap-1"
           >
-            Explore all complaints <ArrowRight className="w-3.5 h-3.5" />
+            Explore All Grievances <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
@@ -279,52 +343,53 @@ export const LandingPage: React.FC = () => {
             <Link
               key={c._id}
               to={`/complaints/${c._id}`}
-              className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-xs hover:shadow-lg transition-all flex flex-col justify-between group"
+              className="bg-white dark:bg-[#131E2D] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between group"
             >
               <div>
-                {/* Image preview or placeholder */}
+                {/* Photo preview or landmark placeholder */}
                 <div className="h-40 bg-slate-100 dark:bg-slate-800 relative overflow-hidden">
                   {c.images && c.images.length > 0 ? (
                     <img
                       src={c.images[0]}
                       alt={c.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-slate-400">
-                      <ShieldAlert className="w-10 h-10 opacity-30" />
+                    <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 gap-1">
+                      <Landmark className="w-8 h-8 opacity-40 text-[#1B365D]" />
+                      <span className="text-[10px] font-medium uppercase tracking-wider">Public Record</span>
                     </div>
                   )}
                   <div className="absolute top-2.5 left-2.5">
-                    <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-900/80 text-white backdrop-blur-xs">
+                    <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-[#0F2537]/90 text-white border border-[#C59B27]/40">
                       {c.complaintNumber}
                     </span>
                   </div>
                 </div>
 
-                <div className="p-5 space-y-3">
-                  <div className="flex items-center justify-between gap-2">
+                <div className="p-4 space-y-2.5">
+                  <div className="flex items-center justify-between gap-1.5 flex-wrap">
                     <Badge status={c.status} size="sm" />
                     <Badge priority={c.priority} size="sm" />
                   </div>
 
-                  <h3 className="font-bold text-sm text-slate-900 dark:text-white line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  <h3 className="font-bold text-xs sm:text-sm text-[#0F2537] dark:text-white line-clamp-2 group-hover:text-[#1B365D] dark:group-hover:text-blue-400 transition-colors">
                     {c.title}
                   </h3>
 
-                  <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
                     {c.description}
                   </p>
                 </div>
               </div>
 
-              <div className="px-5 py-3 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/50 flex items-center justify-between text-xs text-slate-500">
+              <div className="px-4 py-2.5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/60 flex items-center justify-between text-xs text-slate-500">
                 <span className="flex items-center gap-1 text-[11px] truncate max-w-[140px]">
                   <MapPin className="w-3.5 h-3.5 shrink-0 text-slate-400" />
-                  {c.location?.address || 'City Area'}
+                  {c.location?.address || 'Municipal Zone'}
                 </span>
-                <span className="flex items-center gap-1 font-medium">
-                  <ThumbsUp className="w-3.5 h-3.5 text-blue-600" />
+                <span className="flex items-center gap-1 font-semibold text-[#1B365D] dark:text-blue-400 text-xs">
+                  <ThumbsUp className="w-3.5 h-3.5" />
                   {c.upvoteCount}
                 </span>
               </div>
@@ -333,28 +398,34 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 5. Call To Action Banner */}
+      {/* 6. Citizen Charter & Civic Commitment Banner */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl bg-gradient-to-tr from-blue-700 via-blue-600 to-indigo-700 text-white p-8 sm:p-14 text-center space-y-6 shadow-xl shadow-blue-600/20">
-          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
-            Ready to make your neighborhood better?
-          </h2>
-          <p className="max-w-xl mx-auto text-blue-100 text-sm sm:text-base leading-relaxed">
-            Report hazards, track status updates as municipal crews work, and contribute to a cleaner, safer community.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-            <Link
-              to="/complaints/new"
-              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-white text-blue-700 font-bold text-sm hover:bg-blue-50 transition-all shadow-md"
-            >
-              Report a Civic Issue Now
-            </Link>
-            <Link
-              to="/register"
-              className="w-full sm:w-auto px-6 py-3 rounded-xl border border-white/40 text-white font-semibold text-sm hover:bg-white/10 transition-all"
-            >
-              Sign Up as Citizen
-            </Link>
+        <div className="rounded-xl bg-[#0F2537] border-2 border-[#C59B27] text-white p-6 sm:p-10 shadow-lg relative overflow-hidden">
+          <div className="max-w-3xl space-y-4 relative z-10">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#1B365D] text-[#C59B27] text-[10px] font-bold uppercase tracking-wider border border-[#C59B27]/40">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              Citizen Redressal Charter
+            </span>
+            <h2 className="text-xl sm:text-3xl font-extrabold tracking-tight text-white">
+              Every Grievance Audited. Every Resolution Documented.
+            </h2>
+            <p className="text-slate-200 text-xs sm:text-sm leading-relaxed">
+              ComplaintHub adheres to public transparency charters. Field officers must attach photographic evidence upon status completion, and citizens retain the right to appeal or reopen unresolved matters.
+            </p>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 pt-2">
+              <Link
+                to="/complaints/new"
+                className="px-5 py-2.5 rounded-lg bg-[#C59B27] hover:bg-[#B0881E] text-white font-bold text-xs uppercase tracking-wider transition-colors shadow-xs"
+              >
+                Register Grievance Now
+              </Link>
+              <Link
+                to="/about"
+                className="px-5 py-2.5 rounded-lg border border-slate-400 text-slate-200 hover:text-white hover:border-white font-semibold text-xs uppercase tracking-wider transition-colors"
+              >
+                Read Citizen Charter Standards →
+              </Link>
+            </div>
           </div>
         </div>
       </section>

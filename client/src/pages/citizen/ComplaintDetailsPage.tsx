@@ -367,11 +367,11 @@ export const ComplaintDetailsPage: React.FC = () => {
         <BackButton fallbackUrl="/complaints" label="Back to complaints" />
       </div>
 
-      {/* Main Header Container */}
-      <div className="bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-4">
+      {/* Main Official Grievance Dossier Header */}
+      <div className="bg-white dark:bg-[#131E2D] p-6 sm:p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs border-t-4 border-t-[#C59B27] space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-mono text-xs font-extrabold px-3 py-1 rounded-lg bg-slate-900 text-white dark:bg-slate-800">
+            <span className="font-mono text-xs font-bold px-3 py-1 rounded bg-[#0F2537] text-white border border-[#C59B27]/40 shadow-2xs">
               {complaint.complaintNumber}
             </span>
             <Badge status={complaint.status} size="md" />
@@ -380,26 +380,26 @@ export const ComplaintDetailsPage: React.FC = () => {
 
           <div className="flex flex-wrap items-center gap-2">
             {/* Upvote Button */}
-            <Button type="button" variant={complaint.isUpvoted ? 'primary' : 'outline'} size="sm" onClick={handleVoteToggle} leftIcon={<ThumbsUp className="w-4 h-4" />}>
-              {complaint.isUpvoted ? 'Upvoted' : 'Upvote'} ({complaint.upvoteCount})
+            <Button type="button" variant={complaint.isUpvoted ? 'primary' : 'outline'} size="sm" onClick={handleVoteToggle} leftIcon={<ThumbsUp className="w-3.5 h-3.5" />}>
+              {complaint.isUpvoted ? 'Upvoted' : 'Support Issue'} ({complaint.upvoteCount})
             </Button>
 
             {/* Follow Button */}
-            <Button type="button" variant={complaint.isFollowed ? 'secondary' : 'outline'} size="sm" onClick={handleFollowToggle} leftIcon={<Bookmark className="w-4 h-4" />}>
-              {complaint.isFollowed ? 'Following' : 'Follow'} ({complaint.followerCount})
+            <Button type="button" variant={complaint.isFollowed ? 'secondary' : 'outline'} size="sm" onClick={handleFollowToggle} leftIcon={<Bookmark className="w-3.5 h-3.5 text-[#C59B27]" />}>
+              {complaint.isFollowed ? 'Following' : 'Follow Case'} ({complaint.followerCount})
             </Button>
 
             {/* Add Attachments */}
             {canAddAttachments && (
-              <Button type="button" variant="outline" size="sm" onClick={() => setShowAttachModal(true)} leftIcon={<Paperclip className="w-4 h-4" />}>
-                Add Files
+              <Button type="button" variant="outline" size="sm" onClick={() => setShowAttachModal(true)} leftIcon={<Paperclip className="w-3.5 h-3.5" />}>
+                Attach Proof
               </Button>
             )}
 
             {/* Edit Button */}
             {canEdit && (
               <Button type="button" variant="outline" size="sm" onClick={() => setShowEditModal(true)} leftIcon={<Pencil className="w-3.5 h-3.5" />}>
-                Edit
+                Edit Report
               </Button>
             )}
 
@@ -413,30 +413,78 @@ export const ComplaintDetailsPage: React.FC = () => {
             {/* Cancel Button (citizen) */}
             {canCancel && !canDelete && (
               <Button type="button" variant="danger" size="sm" onClick={handleCancelComplaint}>
-                Cancel Report
+                Withdraw Grievance
               </Button>
             )}
           </div>
         </div>
 
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+        <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#0F2537] dark:text-white leading-snug">
           {complaint.title}
         </h1>
 
+        {/* Official Progress Stepper */}
+        <div className="pt-2 pb-1">
+          <div className="p-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/70">
+            <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
+              <span>Official Lifecycle Stepper</span>
+              <span className="text-[#1B365D] dark:text-blue-400 font-mono">Stage: {complaint.status}</span>
+            </div>
+            <div className="grid grid-cols-5 gap-1 text-center text-[10px] font-semibold">
+              {[
+                { key: 'SUBMITTED', label: '1. Lodged' },
+                { key: 'UNDER_REVIEW', label: '2. Review' },
+                { key: 'ASSIGNED', label: '3. Dispatched' },
+                { key: 'IN_PROGRESS', label: '4. Works Active' },
+                { key: 'RESOLVED', label: '5. Resolved' },
+              ].map((step, idx) => {
+                const statusOrder = ['SUBMITTED', 'UNDER_REVIEW', 'ASSIGNED', 'IN_PROGRESS', 'RESOLVED'];
+                const currentIdx = statusOrder.indexOf(complaint.status);
+                const isPassed = currentIdx >= idx;
+                const isCurrent = currentIdx === idx;
+                return (
+                  <div key={step.key} className="space-y-1">
+                    <div
+                      className={`h-2 rounded-full transition-colors ${
+                        isCurrent
+                          ? 'bg-[#C59B27]'
+                          : isPassed
+                          ? 'bg-[#1B365D] dark:bg-blue-600'
+                          : 'bg-slate-200 dark:bg-slate-700'
+                      }`}
+                    />
+                    <span
+                      className={`truncate block ${
+                        isCurrent
+                          ? 'text-[#C59B27] font-bold'
+                          : isPassed
+                          ? 'text-[#1B365D] dark:text-blue-300'
+                          : 'text-slate-400'
+                      }`}
+                    >
+                      {step.label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
         <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800">
           <span className="flex items-center gap-1.5">
-            <User className="w-3.5 h-3.5 text-slate-400" />
-            Reported by <span className="font-semibold text-slate-700 dark:text-slate-200">{complaint.createdBy?.name || 'Citizen'}</span>
+            <User className="w-3.5 h-3.5 text-[#C59B27]" />
+            Complainant: <span className="font-semibold text-slate-800 dark:text-slate-200">{complaint.createdBy?.name || 'Citizen'}</span>
           </span>
           <span>•</span>
           <span className="flex items-center gap-1.5">
             <Calendar className="w-3.5 h-3.5 text-slate-400" />
-            {new Date(complaint.createdAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
+            Lodged: {new Date(complaint.createdAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
           </span>
           <span>•</span>
           <span className="flex items-center gap-1.5">
             <Building className="w-3.5 h-3.5 text-slate-400" />
-            {complaint.category?.name} • {complaint.department?.name}
+            Division: {complaint.category?.name} ({complaint.department?.name || 'Assigned Wing'})
           </span>
         </div>
       </div>

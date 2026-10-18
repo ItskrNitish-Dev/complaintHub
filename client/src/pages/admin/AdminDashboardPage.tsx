@@ -8,6 +8,7 @@ import {
   Users,
   Shield,
   TrendingUp,
+  Landmark,
 } from 'lucide-react';
 import {
   PieChart,
@@ -80,10 +81,10 @@ export const AdminDashboardPage: React.FC = () => {
 
   // Chart Data 1: Status Distribution
   const statusData = [
-    { name: 'Pending', value: pendingCount || 1, color: '#f59e0b' },
-    { name: 'In Progress', value: inProgressCount || 2, color: '#3b82f6' },
-    { name: 'Resolved', value: resolvedCount || 3, color: '#10b981' },
-    { name: 'Rejected/Closed', value: rejectedCount || 1, color: '#f43f5e' },
+    { name: 'Under Review / Pending', value: pendingCount || 1, color: '#D97706' },
+    { name: 'Works In Progress', value: inProgressCount || 2, color: '#1B365D' },
+    { name: 'Resolved & Verified', value: resolvedCount || 3, color: '#059669' },
+    { name: 'Rejected / Cancelled', value: rejectedCount || 1, color: '#DC2626' },
   ];
 
   // Chart Data 2: By Category
@@ -97,7 +98,7 @@ export const AdminDashboardPage: React.FC = () => {
     complaints: categoryCountMap[catName],
   }));
 
-  // Chart Data 3: Trends Over Time (synthetic monthly grouping)
+  // Chart Data 3: Trends Over Time
   const timelineData = [
     { month: 'May', received: 12, resolved: 8 },
     { month: 'Jun', received: 19, resolved: 14 },
@@ -108,62 +109,70 @@ export const AdminDashboardPage: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-8 text-left">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-          Municipal Operations & Analytics Dashboard
-        </h1>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-          Real-time oversight of complaints, status throughput, officer workforce, and civic triage
-        </p>
+    <div className="space-y-6 text-left">
+      <div className="bg-white dark:bg-[#131E2D] p-5 sm:p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs border-l-4 border-l-[#0F2537] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#0F2537] text-[#C59B27] text-[10px] font-bold uppercase tracking-wider mb-1.5">
+            <Landmark className="w-3 h-3" />
+            Executive Administration & Governance Oversight
+          </div>
+          <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#0F2537] dark:text-white">
+            Municipal Operations & SLA Analytics
+          </h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            Centralized monitoring of grievance throughput, SLA turnaround, workforce deployment, and department efficiency
+          </p>
+        </div>
       </div>
 
       {/* 7 KPI Metric Cards (PRD Section 37) */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4">
-        <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
-          <p className="text-[11px] font-semibold text-slate-500">Total Reports</p>
-          <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-1">{totalComplaints}</h3>
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+        <div className="bg-white dark:bg-[#131E2D] p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Total Cases</p>
+          <h3 className="text-xl font-extrabold text-[#0F2537] dark:text-white mt-1">{totalComplaints}</h3>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-amber-200 dark:border-amber-900/60 shadow-xs">
-          <p className="text-[11px] font-semibold text-amber-600">Pending</p>
-          <h3 className="text-xl font-bold text-amber-600 mt-1">{pendingCount}</h3>
+        <div className="bg-white dark:bg-[#131E2D] p-3.5 rounded-xl border border-amber-300 dark:border-amber-800/60 shadow-2xs">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-[#B45309]">Pending</p>
+          <h3 className="text-xl font-extrabold text-[#B45309] dark:text-amber-400 mt-1">{pendingCount}</h3>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-blue-200 dark:border-blue-900/60 shadow-xs">
-          <p className="text-[11px] font-semibold text-blue-600">In Progress</p>
-          <h3 className="text-xl font-bold text-blue-600 mt-1">{inProgressCount}</h3>
+        <div className="bg-white dark:bg-[#131E2D] p-3.5 rounded-xl border border-blue-300 dark:border-blue-800/60 shadow-2xs">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-[#1B365D] dark:text-blue-300">In Progress</p>
+          <h3 className="text-xl font-extrabold text-[#1B365D] dark:text-blue-400 mt-1">{inProgressCount}</h3>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-emerald-200 dark:border-emerald-900/60 shadow-xs">
-          <p className="text-[11px] font-semibold text-emerald-600">Resolved</p>
-          <h3 className="text-xl font-bold text-emerald-600 mt-1">{resolvedCount}</h3>
+        <div className="bg-white dark:bg-[#131E2D] p-3.5 rounded-xl border border-emerald-300 dark:border-emerald-800/60 shadow-2xs">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-[#047857]">Resolved</p>
+          <h3 className="text-xl font-extrabold text-[#047857] dark:text-emerald-400 mt-1">{resolvedCount}</h3>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-rose-200 dark:border-rose-900/60 shadow-xs">
-          <p className="text-[11px] font-semibold text-rose-600">Rejected</p>
-          <h3 className="text-xl font-bold text-rose-600 mt-1">{rejectedCount}</h3>
+        <div className="bg-white dark:bg-[#131E2D] p-3.5 rounded-xl border border-rose-300 dark:border-rose-800/60 shadow-2xs">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-[#B91C1C]">Rejected</p>
+          <h3 className="text-xl font-extrabold text-[#B91C1C] dark:text-rose-400 mt-1">{rejectedCount}</h3>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
-          <p className="text-[11px] font-semibold text-purple-600">Total Users</p>
-          <h3 className="text-xl font-bold text-purple-600 mt-1">{totalUsers}</h3>
+        <div className="bg-white dark:bg-[#131E2D] p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-purple-700 dark:text-purple-300">Citizens</p>
+          <h3 className="text-xl font-extrabold text-purple-700 dark:text-purple-300 mt-1">{totalUsers}</h3>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
-          <p className="text-[11px] font-semibold text-indigo-600">Officers</p>
-          <h3 className="text-xl font-bold text-indigo-600 mt-1">{totalOfficers}</h3>
+        <div className="bg-white dark:bg-[#131E2D] p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-[#C59B27]">Officers</p>
+          <h3 className="text-xl font-extrabold text-[#C59B27] mt-1">{totalOfficers}</h3>
         </div>
       </div>
 
-      {/* Analytics Charts Grid (Recharts) */}
+      {/* Analytics Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Chart 1: Status Breakdown (Donut) */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-sm">Complaints by Status Lifecycle</CardTitle>
+          <CardHeader className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800">
+            <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#0F2537] dark:text-white">
+              Grievance Lifecycle Distribution
+            </CardTitle>
           </CardHeader>
-          <CardContent className="h-64 flex items-center justify-center">
+          <CardContent className="h-64 flex items-center justify-center p-4">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -187,18 +196,20 @@ export const AdminDashboardPage: React.FC = () => {
 
         {/* Chart 2: Trends Over Time (Area) */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-sm">Complaint Resolution Throughput (Over Time)</CardTitle>
+          <CardHeader className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800">
+            <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#0F2537] dark:text-white">
+              Resolution Throughput & Receipt Trends
+            </CardTitle>
           </CardHeader>
-          <CardContent className="h-64">
+          <CardContent className="h-64 p-4">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={timelineData}>
                 <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
                 <XAxis dataKey="month" fontSize={11} />
                 <YAxis fontSize={11} />
                 <Tooltip />
-                <Area type="monotone" dataKey="received" stroke="#3b82f6" fill="#93c5fd" opacity={0.6} name="Received" />
-                <Area type="monotone" dataKey="resolved" stroke="#10b981" fill="#86efac" opacity={0.6} name="Resolved" />
+                <Area type="monotone" dataKey="received" stroke="#1B365D" fill="#93c5fd" opacity={0.6} name="Lodged" />
+                <Area type="monotone" dataKey="resolved" stroke="#059669" fill="#86efac" opacity={0.6} name="Resolved" />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>
@@ -206,17 +217,19 @@ export const AdminDashboardPage: React.FC = () => {
 
         {/* Chart 3: Category Breakdown (Bar) */}
         <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="text-sm">Complaints Volume by Civic Category</CardTitle>
+          <CardHeader className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800">
+            <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#0F2537] dark:text-white">
+              Department Grievance Volume Breakdown
+            </CardTitle>
           </CardHeader>
-          <CardContent className="h-64">
+          <CardContent className="h-64 p-4">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={categoryData.length > 0 ? categoryData : [{ name: 'Roads', complaints: 4 }, { name: 'Waste', complaints: 3 }]}>
+              <BarChart data={categoryData.length > 0 ? categoryData : [{ name: 'Roads', complaints: 4 }, { name: 'Solid Waste', complaints: 3 }]}>
                 <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
                 <XAxis dataKey="name" fontSize={11} />
                 <YAxis fontSize={11} />
                 <Tooltip />
-                <Bar dataKey="complaints" fill="#3b82f6" radius={[6, 6, 0, 0]} name="Total Complaints" />
+                <Bar dataKey="complaints" fill="#1B365D" radius={[4, 4, 0, 0]} name="Total Grievances" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>

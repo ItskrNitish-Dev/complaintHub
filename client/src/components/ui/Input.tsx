@@ -15,12 +15,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full space-y-1.5 text-left">
         {label && (
-          <label htmlFor={inputId} className="block text-sm font-medium text-slate-700 dark:text-slate-200">
+          <label htmlFor={inputId} className="block text-xs font-semibold text-[#0F2537] dark:text-slate-200 uppercase tracking-wider">
             {label}
-            {props.required && <span className="text-rose-500 ml-1">*</span>}
+            {props.required && <span className="text-[#DC2626] ml-1">*</span>}
           </label>
         )}
-        <div className="relative rounded-lg shadow-sm">
+        <div className="relative rounded-lg shadow-2xs">
           {leftIcon && (
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
               {leftIcon}
@@ -29,11 +29,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             id={inputId}
             ref={ref}
-            className={`block w-full rounded-lg text-sm transition-colors duration-150 border bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:cursor-not-allowed
+            className={`block w-full rounded-lg text-sm transition-colors duration-150 border bg-white dark:bg-[#131E2D] text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1B365D]/20 disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:cursor-not-allowed
               ${leftIcon ? 'pl-10' : 'pl-3.5'}
               ${rightIcon ? 'pr-10' : 'pr-3.5'}
               py-2.5
-              ${error ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20' : 'border-slate-300 dark:border-slate-700 focus:border-blue-600'}
+              ${error ? 'border-[#DC2626] focus:border-[#DC2626] focus:ring-[#DC2626]/20' : 'border-slate-300 dark:border-slate-700 focus:border-[#1B365D]'}
               ${className}`}
             {...props}
           />
@@ -43,7 +43,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             </div>
           )}
         </div>
-        {error && <p className="text-xs text-rose-500 mt-1 font-medium">{error}</p>}
+        {error && <p className="text-xs text-[#DC2626] mt-1 font-medium">{error}</p>}
         {helperText && !error && <p className="text-xs text-slate-500 mt-1">{helperText}</p>}
       </div>
     );
