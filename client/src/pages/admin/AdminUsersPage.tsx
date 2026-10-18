@@ -8,6 +8,7 @@ import { Button } from '../../components/ui/Button';
 import { Card, CardContent } from '../../components/ui/Card';
 import { Modal } from '../../components/ui/Modal';
 import { Alert } from '../../components/ui/Alert';
+import { BackButton } from '../../components/ui/BackButton';
 
 export const AdminUsersPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -112,6 +113,10 @@ export const AdminUsersPage: React.FC = () => {
 
   return (
     <div className="space-y-6 text-left">
+      <div>
+        <BackButton fallbackUrl="/admin/dashboard" />
+      </div>
+
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
           User Account Directory

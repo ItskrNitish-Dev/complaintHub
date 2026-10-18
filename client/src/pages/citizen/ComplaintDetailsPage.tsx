@@ -25,6 +25,7 @@ import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card';
 import { Alert } from '../../components/ui/Alert';
+import { BackButton } from '../../components/ui/BackButton';
 
 // ─── Edit Modal ────────────────────────────────────────────────────────────────
 interface EditModalProps {
@@ -360,15 +361,11 @@ export const ComplaintDetailsPage: React.FC = () => {
     user && (user.id === cm.user?._id || user._id === cm.user?._id || isAdmin);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 text-left">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 text-left">
       {/* Back Button */}
-      <button
-        type="button"
-        onClick={() => navigate(-1)}
-        className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-900 dark:hover:text-slate-100"
-      >
-        <ArrowLeft className="w-3.5 h-3.5" /> Back to list
-      </button>
+      <div>
+        <BackButton fallbackUrl="/complaints" label="Back to complaints" />
+      </div>
 
       {/* Main Header Container */}
       <div className="bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-4">

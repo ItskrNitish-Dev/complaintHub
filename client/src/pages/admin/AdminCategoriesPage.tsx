@@ -9,6 +9,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Ca
 import { Modal } from '../../components/ui/Modal';
 import { Alert } from '../../components/ui/Alert';
 import { useToast } from '../../context/ToastContext';
+import { BackButton } from '../../components/ui/BackButton';
 
 export const AdminCategoriesPage: React.FC = () => {
   const toast = useToast();
@@ -133,6 +134,10 @@ export const AdminCategoriesPage: React.FC = () => {
 
   return (
     <div className="space-y-6 text-left">
+      <div>
+        <BackButton fallbackUrl="/admin/dashboard" />
+      </div>
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">

@@ -10,6 +10,7 @@ import { Button } from '../../components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { Alert } from '../../components/ui/Alert';
+import { BackButton } from '../../components/ui/BackButton';
 
 const profileSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -56,7 +57,11 @@ export const ProfilePage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-left">
+      <div>
+        <BackButton fallbackUrl="/dashboard" />
+      </div>
+
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
           Account Profile

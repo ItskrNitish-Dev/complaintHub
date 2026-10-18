@@ -24,6 +24,7 @@ import { Badge } from '../../components/ui/Badge';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card';
 import { Alert } from '../../components/ui/Alert';
 import { useToast } from '../../context/ToastContext';
+import { BackButton } from '../../components/ui/BackButton';
 
 const reportSchema = z.object({
   title: z
@@ -189,7 +190,11 @@ export const ReportComplaintPage: React.FC = () => {
   const selectedCategoryObj = categories.find((c) => c._id === formValues.category);
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8 pb-16">
+    <div className="max-w-3xl mx-auto space-y-6 pb-16 text-left">
+      <div>
+        <BackButton fallbackUrl="/dashboard" />
+      </div>
+
       {/* Title */}
       <div>
         <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">

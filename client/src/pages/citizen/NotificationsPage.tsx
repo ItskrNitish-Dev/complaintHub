@@ -5,6 +5,7 @@ import { notificationsApi } from '../../api/notifications.api';
 import { NotificationItem } from '../../types';
 import { Button } from '../../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card';
+import { BackButton } from '../../components/ui/BackButton';
 
 export const NotificationsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -58,6 +59,10 @@ export const NotificationsPage: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 text-left">
+      <div>
+        <BackButton fallbackUrl="/dashboard" />
+      </div>
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">

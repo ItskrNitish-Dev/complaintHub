@@ -3,12 +3,17 @@ import { useAuth } from '../../features/auth/AuthContext';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { ShieldCheck, Building, Mail, Phone, Calendar } from 'lucide-react';
+import { BackButton } from '../../components/ui/BackButton';
 
 export const OfficerProfilePage: React.FC = () => {
   const { user, role } = useAuth();
 
   return (
     <div className="space-y-6 text-left">
+      <div>
+        <BackButton fallbackUrl="/officer/dashboard" />
+      </div>
+
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
           Officer Credentials & Division

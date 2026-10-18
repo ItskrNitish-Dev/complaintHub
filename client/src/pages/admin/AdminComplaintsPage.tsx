@@ -11,6 +11,7 @@ import { Button } from '../../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card';
 import { Modal } from '../../components/ui/Modal';
 import { Alert } from '../../components/ui/Alert';
+import { BackButton } from '../../components/ui/BackButton';
 
 export const AdminComplaintsPage: React.FC = () => {
   const [complaints, setComplaints] = useState<Complaint[]>([]);
@@ -148,6 +149,10 @@ export const AdminComplaintsPage: React.FC = () => {
 
   return (
     <div className="space-y-6 text-left">
+      <div>
+        <BackButton fallbackUrl="/admin/dashboard" />
+      </div>
+
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
           Manage All Civic Complaints
