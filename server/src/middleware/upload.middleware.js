@@ -1,90 +1,105 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { Readable } = require('stream');
+
 const { cloudinary, isConfigured } = require('../config/cloudinary');
 const { AppError } = require('../utils/apiResponse');
 
-// Ensure uploads folder exists
-const uploadsDir = path.join(__dirname, '../../uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadsDir);
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname).toLowerCase();
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    cb(null, `complaint-${uniqueSuffix}${ext}`);
-  },
-});
+// Use memory storage instead of disk storage.
+// This avoids writing files to Vercel's read-only filesystem.
+const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
-  const allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+  const allowedMimes = [
+    'image/jpeg',
+    'image/png',
+    'image/webp',
+  ];
+
   if (allowedMimes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new AppError('Only JPEG, PNG, and WebP image formats are supported', 400, 'INVALID_FILE_TYPE'), false);
+    cb(
+      new AppError(
+        'Only JPEG, PNG, and WebP image formats are supported',
+        400,
+        'INVALID_FILE_TYPE'
+      ),
+      false
+    );
   }
 };
 
 const upload = multer({
   storage,
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB limit
+    fileSize: 5 * 1024 * 1024, // 5 MB per image
   },
   fileFilter,
 });
 
+// Upload a memory buffer directly to Cloudinary.
+const uploadBufferToCloudinary = (buffer, options = {}) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: 'complaint_hub',
+        resource_type: 'image',
+        ...options,
+      },
+      (error, result) => {
+        if (error) {
+          return reject(error);
+        }
+
+        resolve(result);
+      }
+    );
+
+    Readable.from(buffer).pipe(stream);
+  });
+};
+
 /**
- * Process uploaded files: if Cloudinary is configured, upload to Cloudinary;
- * otherwise return local URL path `/uploads/filename`.
+ * Upload processed files to Cloudinary.
+ * No local file paths or filesystem writes are required.
  */
 const processUploadedFiles = async (files = []) => {
-  if (!files || files.length === 0) return [];
+  if (!files || files.length === 0) {
+    return [];
+  }
+
+  if (!isConfigured) {
+    throw new AppError(
+      'Image storage is not configured. Please try again later.',
+      503,
+      'IMAGE_STORAGE_NOT_CONFIGURED'
+    );
+  }
 
   const processed = [];
 
   for (const file of files) {
-    if (isConfigured) {
-      try {
-        const uploadResult = await cloudinary.uploader.upload(file.path, {
-          folder: 'complaint_hub',
-          resource_type: 'image',
-        });
-        // Delete local temp file
-        if (fs.existsSync(file.path)) {
-          fs.unlinkSync(file.path);
-        }
-        processed.push({
-          url: uploadResult.secure_url,
-          publicId: uploadResult.public_id,
-          fileType: file.mimetype,
-          originalName: file.originalname,
-          size: file.size,
-        });
-      } catch (err) {
-        console.error('Cloudinary upload error:', err);
-        // Fallback to local file URL if Cloudinary fails
-        processed.push({
-          url: `/uploads/${file.filename}`,
-          publicId: '',
-          fileType: file.mimetype,
-          originalName: file.originalname,
-          size: file.size,
-        });
-      }
-    } else {
-      // Local storage
+    try {
+      const result = await uploadBufferToCloudinary(file.buffer);
+
       processed.push({
-        url: `/uploads/${file.filename}`,
-        publicId: '',
+        url: result.secure_url,
+        publicId: result.public_id,
         fileType: file.mimetype,
-        originalName: file.originalname,
+        originalName: path.basename(file.originalname),
         size: file.size,
       });
+    } catch (error) {
+      console.error('Cloudinary upload failed:', error);
+
+      // Do not fall back to local storage on Vercel.
+      throw new AppError(
+        'Failed to upload complaint image. Please try again.',
+        502,
+        'IMAGE_UPLOAD_FAILED'
+      );
     }
   }
 
